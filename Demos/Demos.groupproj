@@ -1,0 +1,192 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{56A45542-42D9-49C9-9BFF-53E5A74AED22}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Tutorial\Symmetric.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\SpawnVsCreate.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\Asymmetric.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\GreenletVarArgs.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\Generator.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\JoinN.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\SelectN.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\Scheduling.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\BeginEndThread.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\MonkeyPatching.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\PingPong1.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\PingPong2.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\SyncChannels.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tutorial\AsyncChannels.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Symmetric">
+        <MSBuild Projects="Tutorial\Symmetric.dproj"/>
+    </Target>
+    <Target Name="Symmetric:Clean">
+        <MSBuild Projects="Tutorial\Symmetric.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Symmetric:Make">
+        <MSBuild Projects="Tutorial\Symmetric.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SpawnVsCreate">
+        <MSBuild Projects="Tutorial\SpawnVsCreate.dproj"/>
+    </Target>
+    <Target Name="SpawnVsCreate:Clean">
+        <MSBuild Projects="Tutorial\SpawnVsCreate.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SpawnVsCreate:Make">
+        <MSBuild Projects="Tutorial\SpawnVsCreate.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Asymmetric">
+        <MSBuild Projects="Tutorial\Asymmetric.dproj"/>
+    </Target>
+    <Target Name="Asymmetric:Clean">
+        <MSBuild Projects="Tutorial\Asymmetric.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Asymmetric:Make">
+        <MSBuild Projects="Tutorial\Asymmetric.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="GreenletVarArgs">
+        <MSBuild Projects="Tutorial\GreenletVarArgs.dproj"/>
+    </Target>
+    <Target Name="GreenletVarArgs:Clean">
+        <MSBuild Projects="Tutorial\GreenletVarArgs.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GreenletVarArgs:Make">
+        <MSBuild Projects="Tutorial\GreenletVarArgs.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Generator">
+        <MSBuild Projects="Tutorial\Generator.dproj"/>
+    </Target>
+    <Target Name="Generator:Clean">
+        <MSBuild Projects="Tutorial\Generator.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Generator:Make">
+        <MSBuild Projects="Tutorial\Generator.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="JoinN">
+        <MSBuild Projects="Tutorial\JoinN.dproj"/>
+    </Target>
+    <Target Name="JoinN:Clean">
+        <MSBuild Projects="Tutorial\JoinN.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JoinN:Make">
+        <MSBuild Projects="Tutorial\JoinN.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SelectN">
+        <MSBuild Projects="Tutorial\SelectN.dproj"/>
+    </Target>
+    <Target Name="SelectN:Clean">
+        <MSBuild Projects="Tutorial\SelectN.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SelectN:Make">
+        <MSBuild Projects="Tutorial\SelectN.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Scheduling">
+        <MSBuild Projects="Tutorial\Scheduling.dproj"/>
+    </Target>
+    <Target Name="Scheduling:Clean">
+        <MSBuild Projects="Tutorial\Scheduling.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Scheduling:Make">
+        <MSBuild Projects="Tutorial\Scheduling.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BeginEndThread">
+        <MSBuild Projects="Tutorial\BeginEndThread.dproj"/>
+    </Target>
+    <Target Name="BeginEndThread:Clean">
+        <MSBuild Projects="Tutorial\BeginEndThread.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BeginEndThread:Make">
+        <MSBuild Projects="Tutorial\BeginEndThread.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MonkeyPatching">
+        <MSBuild Projects="Tutorial\MonkeyPatching.dproj"/>
+    </Target>
+    <Target Name="MonkeyPatching:Clean">
+        <MSBuild Projects="Tutorial\MonkeyPatching.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MonkeyPatching:Make">
+        <MSBuild Projects="Tutorial\MonkeyPatching.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="PingPong1">
+        <MSBuild Projects="Tutorial\PingPong1.dproj"/>
+    </Target>
+    <Target Name="PingPong1:Clean">
+        <MSBuild Projects="Tutorial\PingPong1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PingPong1:Make">
+        <MSBuild Projects="Tutorial\PingPong1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="PingPong2">
+        <MSBuild Projects="Tutorial\PingPong2.dproj"/>
+    </Target>
+    <Target Name="PingPong2:Clean">
+        <MSBuild Projects="Tutorial\PingPong2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PingPong2:Make">
+        <MSBuild Projects="Tutorial\PingPong2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SyncChannels">
+        <MSBuild Projects="Tutorial\SyncChannels.dproj"/>
+    </Target>
+    <Target Name="SyncChannels:Clean">
+        <MSBuild Projects="Tutorial\SyncChannels.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SyncChannels:Make">
+        <MSBuild Projects="Tutorial\SyncChannels.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="AsyncChannels">
+        <MSBuild Projects="Tutorial\AsyncChannels.dproj"/>
+    </Target>
+    <Target Name="AsyncChannels:Clean">
+        <MSBuild Projects="Tutorial\AsyncChannels.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AsyncChannels:Make">
+        <MSBuild Projects="Tutorial\AsyncChannels.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Symmetric;SpawnVsCreate;Asymmetric;GreenletVarArgs;Generator;JoinN;SelectN;Scheduling;BeginEndThread;MonkeyPatching;PingPong1;PingPong2;SyncChannels;AsyncChannels"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Symmetric:Clean;SpawnVsCreate:Clean;Asymmetric:Clean;GreenletVarArgs:Clean;Generator:Clean;JoinN:Clean;SelectN:Clean;Scheduling:Clean;BeginEndThread:Clean;MonkeyPatching:Clean;PingPong1:Clean;PingPong2:Clean;SyncChannels:Clean;AsyncChannels:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Symmetric:Make;SpawnVsCreate:Make;Asymmetric:Make;GreenletVarArgs:Make;Generator:Make;JoinN:Make;SelectN:Make;Scheduling:Make;BeginEndThread:Make;MonkeyPatching:Make;PingPong1:Make;PingPong2:Make;SyncChannels:Make;AsyncChannels:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

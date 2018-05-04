@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{6BCD4FB5-8AA5-448D-9F42-171661DB4312}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Tests\Tests.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Demos\Tutorial\Symmetric.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Tests">
+        <MSBuild Projects="Tests\Tests.dproj"/>
+    </Target>
+    <Target Name="Tests:Clean">
+        <MSBuild Projects="Tests\Tests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Tests:Make">
+        <MSBuild Projects="Tests\Tests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Symmetric">
+        <MSBuild Projects="Demos\Tutorial\Symmetric.dproj"/>
+    </Target>
+    <Target Name="Symmetric:Clean">
+        <MSBuild Projects="Demos\Tutorial\Symmetric.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Symmetric:Make">
+        <MSBuild Projects="Demos\Tutorial\Symmetric.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Tests;Symmetric"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Tests:Clean;Symmetric:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Tests:Make;Symmetric:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

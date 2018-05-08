@@ -1421,7 +1421,7 @@ begin
   if (GetCurrent = FContext) and (FHub = GetCurrentHub) then
     Exit;
   if Assigned(FContext) then begin
-    // TODO: вызов GetCurrentHub дорого стоит. Если убрать скорость вырастет в 1.5-2 раза
+    // TODO: the call to GetCurrentHub is expensive. If you remove the speed will increase in 1.5-2 times
     if (FHub = CurHub) and (not Async) then begin
       TRawGreenletPImpl(FContext).SetState(gsExecute);
       TRawGreenletPImpl(FContext).Switch

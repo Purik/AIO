@@ -96,9 +96,9 @@ type
     constructor Create;
     destructor Destroy; override;
     // io operations
-    // если Size > 0 -> вернет управление после полного завершения
-    // если Size < 0 -> вернет управление при неполном завершении операции
-    // если Size = 0 -> вернет длину буфера в драйвере устройства
+    // if Size > 0 -> Will return control when all bytes will be transmitted
+    // if Size < 0 -> Will return control when the operation is completed partially
+    // if Size = 0 -> Will return data buffer length of driver
     function Read(Buf: Pointer; Size: Integer): LongWord; dynamic;
     function Write(Buf: Pointer; Size: Integer): LongWord; dynamic;
     // stream interfaces
@@ -1160,7 +1160,7 @@ begin
     FAcive := True;
   end
   else begin
-    // принудительно завершим все равно
+    // forcefully finish anyway
     Disconnect;
   end;
 end;

@@ -19,9 +19,9 @@ type
   IAioProvider = interface
     ['{2E14A16F-BDF8-4116-88A6-41C18591D444}']
     // io operations
-    // если Size > 0 -> вернет управление после полного завершения
-    // если Size < 0 -> вернет управление при неполном завершении операции
-    // если Size = 0 -> вернет длину буфера в драйвере устройства
+    // if Size > 0 -> Will return control when all bytes will be transmitted
+    // if Size < 0 -> Will return control when the operation is completed partially
+    // if Size = 0 -> Will return data buffer length of driver
     function Read(Buf: Pointer; Size: Integer): LongWord;
     function Write(Buf: Pointer; Size: Integer): LongWord;
     // stream interfaces

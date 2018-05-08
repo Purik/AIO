@@ -30,10 +30,10 @@ const
 
 
 type
-  // Контекст выполнения кода
+  // Running context
   TContext = Pointer;
 
-  // Ф-ия входа в контекст
+  // Context entry point
   TEnterProc = procedure(Param: Pointer); cdecl;
 
 

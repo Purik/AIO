@@ -213,8 +213,8 @@ type
     FList = {$IFDEF DCC}TList{$ELSE}TFPGList{$ENDIF}<PFileTuple>;
   var
     FMap: TMap;
-    // в операци€х ввода-вывода могут приходить callbacks на закрытые
-    // дескрипторы. Ёто вы€влено дл€ сокетов
+    // in input-output operations callbacks can come to private
+    // descriptors. This is found for sockets
     FTrash: FList;
     FTrashLAstClean: TTime;
     procedure TrashClean(const OnlyByTimeout: Boolean = True);
@@ -462,8 +462,8 @@ begin
       while FLockFreeQueue.Dequeue(Tsk) do ;
     end;
     {$ELSE}
-    // коммит транзакции на запись и переход данных
-    // в транзакцию на чтение - дл€ снижени€ проблем с race condition
+    // transaction commit to write and transfer data
+    // in transaction for reading - to reduce problems with race condition
     Swap(FQueue, FAccumQueue);
     Result := Result or (FQueue.Count > 0);
     if FQueue.Count > 0 then
@@ -473,8 +473,8 @@ begin
           Process(Tsk);
         end;
       finally
-        // об€з€тельно надо чистить, иначе при Abort или Exception
-        // на след итерации исп. очереди вылезут "устаревшие" вызовы
+        // obligatory it is necessary to clean, differently at Abort or Exception
+        // on the iteration trace. queues will come up with "outdated" calls
         FQueue.Clear;
       end;
     {$ENDIF}
@@ -654,7 +654,7 @@ begin
   {$ELSE}
   Lock;
   try
-    // транзакци€ на запись
+    // write transaction
     FAccumQueue.Add(Tsk);
   finally
     Unlock;
@@ -1406,7 +1406,6 @@ begin
   Result.Hub := Hub;
   Result.Active := True;
   {$IFDEF MSWINDOWS}
-  // согласно msdn эти пол€ мона юзать как хочешь
   Result.Overlap.hEvent := NativeUInt(Result);
   {$ENDIF}
   if Now > FTrashLAstClean then

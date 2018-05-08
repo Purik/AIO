@@ -18,10 +18,10 @@ type
   end;
 
   ///	<summary>
-  ///   Гарантирует, что обратившиеся за ресурсом сопрограммы / нитки
-  ///   будут выстроены в очередь и в том же порядке будут
-  ///   получать доступ когда Condition сбросится в сигнал. состояние
-  ///   Благодаря участию мьютекса/крит секции может спасти от ABA проблемы
+  /// Ensures that the coroutines addressed to the resource
+  /// will be queued and in the same order will be
+  /// access when Condition is reset. state
+  /// Thanks to the participation of the mutex / critical section can save ABA problems
   ///	</summary>
   { code example:
       ___ greenlet/thread no.1
@@ -45,28 +45,28 @@ type
   public
     class function Make(aExternalMutex: TCriticalSection = nil): TGCondVariable; static;
     ///	<summary>
-    ///   Ждать сигнального состояния
+    ///   Wait for the signal state
     ///	</summary>
     ///	<remarks>
-    ///  Если решение о Wait принимается внутри Lock-а
-    ///  безопасно будет освобаждать этот Lock внутри вызова Wait
-    ///  потому что попадание в очередь ожидания должно произойти
-    ///  до unLock-a и не потерять состояние
+    /// If the decision about Wait is received inside the Lock
+    /// will safely escape this lock inside the call Wait
+    /// because getting into the waiting queue must happen
+    /// to unLock-a and not lose state
     ///	</remarks>
     procedure Wait(aUnlocking: TCriticalSection = nil); overload; inline;
     procedure Wait(aSpinUnlocking: TPasMPSpinLock); overload; inline;
     ///	<summary>
-    ///   Дернуть первого в очереди (если он есть)
+    ///   Toss the first in the queue (if there is one)
     ///	</summary>
     procedure Signal; inline;
     ///	<summary>
-    ///   Дернуть всю очередь
+    ///   To pull all queue
     ///	</summary>
     procedure Broadcast; inline;
   end;
 
   ///	<summary>
-  ///   Семафор
+  ///   Semaphore
   ///	</summary>
   TGSemaphore = record
   strict private
@@ -89,7 +89,7 @@ type
   end;
 
   ///	<summary>
-  ///   Очередь для синхронизации сопрограмм или сопрограмм с ниткой
+  ///   A queue for synchronizing coroutines or coroutines with a thread
   ///	</summary>
   TGQueue<T> = record
   strict private
@@ -103,8 +103,8 @@ type
   end;
 
   {*
-    Окружение позволяет гринлетам созданным в тек. контексте наследовать
-    переменные окружения
+    The environment allows grinlets created in the text. context inherit
+     environment variables
   *}
   IGreenEnvironment = interface
     procedure SetValue(const Name: string; Value: TPersistent);
@@ -125,8 +125,8 @@ type
   end;
 
   {*
-    Сопрограмма - запускает процедуру в своем стеке
-    со своими регистрами CPU со своим деревом обработчиков исключений
+    Coroutine - starts the procedure on its stack
+     with its CPU registers with its exception handler tree
   *}
 
   TGreenlet = record
@@ -147,12 +147,12 @@ type
     class operator Implicit(const A: TGreenlet): IGreenlet; overload;
     class operator Implicit(const A: TGreenlet): TGevent; overload;
     ///	<summary>
-    ///	  Дать  процессор
+    ///	  Give Processor
     ///	</summary>
     function Switch: tTuple; overload;
-    // можно на ходу передать параметры, которые гринлет
-    // получит через ... var X: tTuple; X := Yield; ...
-    // (полезно при подстройке генератора на ходу)
+    // You can transfer parameters on the move, which are Greenlet
+    // get through ... var X: tTuple; X: = Yield; ...
+    // (useful when tuning the generator on the fly)
     function Switch(const Args: array of const): tTuple; overload;
     // Вернуть управление вызвавшему
     class function Yield: tTuple; overload; static;
@@ -161,14 +161,14 @@ type
     class function Yield(const A: array of const): tTuple; overload; static;
   end;
 
-  // Генератор
+  // Generator
   { code example:
   var
     Gen := TGenerator<Integer>
     I: Integer;
   begin
     Gen := TGenerator<Integer>.Create(Increment, [4, 11, 3])
-    for I in Gen do begin  // сгенерит 4, 7, 10 без создания массива в памяти
+    for I in Gen do begin  // will produce 4, 7, 10 witout allocation data in memory
       -> do somethings
     end
   end;
@@ -200,7 +200,7 @@ type
   end;
 
   {*
-    Позволяет объединять машины в группу и одновременно уничтожать/ждать
+    Allows you to combine machines into a group and simultaneously destroy / wait
   *}
 
   TGreenGroup<KEY> = record
@@ -444,7 +444,7 @@ type
   end;
 
   ///	<summary>
-  /// Позволяет поизводить неблокирующую запись/чтение для каналов через Select
+  /// Allows nonblocking write / read for channels through Select
   /// </summary>
   TCase<T> = record
   private
@@ -462,13 +462,13 @@ type
   end;
 
   ///	<summary>
-  ///   канал передачи, позволяет обмениваться данными между акторами
-  ///    1) можно отловить закрытие канала
-  ///    2) Как в Erlang и Scala можно строить графыобработки из акторов (реализовано на гринлетах)
-  ///       связанных каналами
-  ///    3) решение проблемы lost-update ->после закрытия канала можно "довыкачать" последние данные
-  ///    4) можно отлавливать DeadLock-и или LeaveLock-и
-  ///    5) синхрон. канал с ThreadSafe = False - минимум оверхедов при передаче данных
+  /// transmission channel, allows data to be exchanged between actors
+  /// 1) you can catch the closing of the channel
+  /// 2) As in Erlang and Scala, you can build graphs of processing from actors (implemented on greenlets)
+  /// linked channels
+  /// 3) the solution to the problem of lost-update -> after the channel is closed, you can "add" the latest data
+  /// 4) you can catch DeadLock-and or LeaveLock-and
+  /// 5) synchronous. channel with ThreadSafe = False - minimum of overheads for data transmission
   ///	</summary>
   { code example:
 
@@ -545,7 +545,7 @@ type
   end;
 
   ///	<summary>
-  ///  Вентилятор - позволяет размножить копии по каналам
+  ///  Fan - allows to duplicate copies on channels
   ///	</summary>
   { code example:
 
@@ -607,37 +607,37 @@ type
 
 function Slice(const Args: array of const; FromIndex: Integer;
   ToIndex: Integer = -1): tTuple;
-// тек контекст
+// current context
 function GetCurrent: TObject;
 function GetEnvironment: IGreenEnvironment;
-// Доступ к контексту гринлета
+// Greenlet context access
 function  Context(const Key: string): TObject; overload; // достать значение по ключу
 procedure Context(const Key: string; Value: TObject); overload; // установить по ключу
 // Garbage collector
 function GC(A: TObject): IGCObject; overload;
-// Вернуть управление
+// Return control from current Greenlet context
 procedure Yield;
-// Поставить гринлеты на обслуживание в тек контексте
-// RaiseErrors=True -> Exception в каком либо гринлете будет выкинут наружу
+// Put greenlets on service in the current context
+// RaiseErrors=True -> Exception in some of greenlet will be thrown out
 function Join(const Workers: array of IRawGreenlet;
   const Timeout: LongWord=INFINITE; const RaiseErrors: Boolean = False): Boolean;
-// Join всех гринлетов, запущенных в тек. хабе по-умолчанию
+// Join all grinlets launched in on current HUB. hub by default
 function JoinAll(const Timeout: LongWord=INFINITE; const RaiseErrors: Boolean = False): Boolean;
-// демультиплексор для набора событий, Index - индекс первого сигнального
+// demultiplexer for a set of events, Index - index of the first signaled
 function Select(const Events: array of TGevent; out Index: Integer;
   const Timeout: LongWord=INFINITE): TWaitResult; overload;
 function Select(const Events: array of THandle; out Index: Integer;
   const Timeout: LongWord=INFINITE): Boolean; overload;
-// Демультиплексор для каналов, для неблокирующего ввода-вывода
+// Demultiplexer for channels, for nonblocking input-output
 function Switch(const Cases: array of ICase; out Index: Integer;
   const Timeout: LongWord=INFINITE): TSwitchResult; overload;
 function Switch(var ReadSet: TCaseSet; var WriteSet: TCaseSet; var ErrorSet: TCaseSet;
   const Timeout: LongWord=INFINITE): TSwitchResult; overload;
-// Усыпить сопрограмму/нитку на aTimeOut мсек
-// при этом не блокируется работа других машин
+// Put the coroutine / thread on aTimeOut msec
+// this does not block the work of other machines
 procedure GreenSleep(aTimeOut: LongWord = INFINITE);
 
-// перепрыгнуть в другую нитку
+// jump over to another thread
 procedure MoveTo(Thread: TGreenThread);
 procedure BeginThread;
 procedure EndThread;
@@ -1219,10 +1219,10 @@ var
       end;
       if (ActiveCnt > 0) then begin
         if GetCurrent = nil then
-          // дадим возможность отработать демультиплексору
+          // we will give an opportunity to work out the demultiplexer
           CurHub.Serve(0)
         else
-          // дадим возможность отработать соседним контекстам
+          // let's work out the neighboring contexts
           TRawGreenletImpl(GetCurrent).Yield;
       end
     end;
@@ -2370,8 +2370,8 @@ begin
     try
       FHub.Loop(Self.ExitCond);
     finally
-      // кого не успели перепланировать - убиваем
-      // т.к. в противном случае в логике появляются неоднозначности
+      // who did not have time to reschedule - we kill
+      // since otherwise, ambiguities appear in the logic
       Joiner.KillAll;
       TRawGreenletPimpl.ClearContexts;
     end;

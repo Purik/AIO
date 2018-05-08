@@ -40,18 +40,18 @@ type
   TAsymmetricRoutineStatic<T1, T2, T3, RES> = function(const A1: T1; const A2: T2; const A3: T3): RES;
   TAsymmetricRoutineStatic<T1, T2, T3, T4, RES> = function(const A1: T1; const A2: T2; const A3: T3; const A4: T4): RES;
 
-  // кортеж параметров
+  // tuple of parameters
   tTuple = array of TVarRec;
 
-  // состояние гринлета
+  // greenlet state
   tGreenletState = (
-    gsReady,       // готов к первому пуску
-    gsExecute,     // выполняется
-    gsTerminated,  // завершился
-    gsKilled,      // завершен насильственно
-    gsException,   // завершился с исключением
-    gsSuspended,   // висит в ожидании например Gevent
-    gsKilling      // запущена процедура убийства
+    gsReady,       // ready for the first launch
+    gsExecute,     // is executing
+    gsTerminated,  // greenlet is ended on its own
+    gsKilled,      // greenlet is killed outside
+    gsException,   // greenlet is ended with Exception
+    gsSuspended,   // greenlet is suspended
+    gsKilling      // greenlet is in killing state
   );
 
   TEnumerator<T> = class
@@ -239,7 +239,7 @@ type
 
   EResultIsEmpty = class(Exception);
 
-  // канал позволяет отловить DeadLock
+  // channel allows you to catch DeadLock
   EChannelDeadLock = class(Exception);
   EChannelLeaveLock = class(Exception);
   EChannelClosed = class(Exception);

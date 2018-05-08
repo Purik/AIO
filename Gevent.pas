@@ -7,9 +7,8 @@ uses SysUtils, Classes, SyncObjs,
 type
 
   {*
-     TGevent - позволяет строить машину состояний вокруг событий
-     в императивном стиле
-     event-driven programming
+     TGevent - allows you to build a state machine around events imperative
+      event-driven programming
   *}
   IGevent = interface
     ['{9F8D9F83-E1DE-478C-86A2-AF641EEF50B7}']

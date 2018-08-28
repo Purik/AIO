@@ -29,15 +29,15 @@ uses
   GSyncObjTests in 'GSyncObjTests.pas',
   Aio in '..\Aio.pas',
   AioTests in 'AioTests.pas',
-  GreenletsImpl in '..\Impl\GreenletsImpl.pas',
-  ChannelImpl in '..\Impl\ChannelImpl.pas',
-  sock in '..\Ext\sock.pas',
-  PasMP in '..\Ext\PasMP.pas',
   ChannelTests in 'ChannelTests.pas',
   MonkeyPatch in '..\MonkeyPatch.pas',
-  AioImpl in '..\Impl\AioImpl.pas',
   GInterfaces in '..\GInterfaces.pas',
-  GarbageCollector in '..\GarbageCollector.pas';
+  GarbageCollector in '..\GarbageCollector.pas',
+  PasMP in '..\PasMP.pas',
+  sock in '..\sock.pas',
+  AioImpl in '..\AioImpl.pas',
+  ChannelImpl in '..\ChannelImpl.pas',
+  GreenletsImpl in '..\GreenletsImpl.pas';
 
 {$R *.RES}
 

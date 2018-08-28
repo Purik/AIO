@@ -7,10 +7,15 @@
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
         <FrameworkType>None</FrameworkType>
-        <ProjectVersion>14.3</ProjectVersion>
+        <ProjectVersion>14.4</ProjectVersion>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='OSX32' and '$(Base)'=='true') or '$(Base_OSX32)'!=''">
+        <Base_OSX32>true</Base_OSX32>
+        <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
@@ -33,6 +38,12 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='OSX32' and '$(Cfg_2)'=='true') or '$(Cfg_2_OSX32)'!=''">
+        <Cfg_2_OSX32>true</Cfg_2_OSX32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
         <Cfg_2_Win32>true</Cfg_2_Win32>
         <CfgParent>Cfg_2</CfgParent>
@@ -49,6 +60,9 @@
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1049</VerInfo_Locale>
         <DCC_K>false</DCC_K>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_OSX32)'!=''">
+        <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
@@ -70,6 +84,9 @@
         <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_OSX32)'!=''">
+        <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
@@ -95,15 +112,15 @@
         <DCCReference Include="GSyncObjTests.pas"/>
         <DCCReference Include="..\Aio.pas"/>
         <DCCReference Include="AioTests.pas"/>
-        <DCCReference Include="..\Impl\GreenletsImpl.pas"/>
-        <DCCReference Include="..\Impl\ChannelImpl.pas"/>
-        <DCCReference Include="..\Ext\sock.pas"/>
-        <DCCReference Include="..\Ext\PasMP.pas"/>
         <DCCReference Include="ChannelTests.pas"/>
         <DCCReference Include="..\MonkeyPatch.pas"/>
-        <DCCReference Include="..\Impl\AioImpl.pas"/>
         <DCCReference Include="..\GInterfaces.pas"/>
         <DCCReference Include="..\GarbageCollector.pas"/>
+        <DCCReference Include="..\PasMP.pas"/>
+        <DCCReference Include="..\sock.pas"/>
+        <DCCReference Include="..\AioImpl.pas"/>
+        <DCCReference Include="..\ChannelImpl.pas"/>
+        <DCCReference Include="..\GreenletsImpl.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

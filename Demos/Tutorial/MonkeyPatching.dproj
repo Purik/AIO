@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{BE890433-6781-4152-BC55-7E4B4D389A31}</ProjectGuid>
-        <ProjectVersion>14.3</ProjectVersion>
+        <ProjectVersion>14.4</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <MainSource>MonkeyPatching.dpr</MainSource>
         <Base>True</Base>
@@ -86,19 +86,6 @@
             <Form>MainForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\..\Impl\AioImpl.pas"/>
-        <DCCReference Include="..\..\Impl\ChannelImpl.pas"/>
-        <DCCReference Include="..\..\Impl\GreenletsImpl.pas"/>
-        <DCCReference Include="..\..\Ext\PasMP.pas"/>
-        <DCCReference Include="..\..\Ext\sock.pas"/>
-        <DCCReference Include="..\..\Aio.pas"/>
-        <DCCReference Include="..\..\Boost.pas"/>
-        <DCCReference Include="..\..\GarbageCollector.pas"/>
-        <DCCReference Include="..\..\Gevent.pas"/>
-        <DCCReference Include="..\..\GInterfaces.pas"/>
-        <DCCReference Include="..\..\Greenlets.pas"/>
-        <DCCReference Include="..\..\Hub.pas"/>
-        <DCCReference Include="..\..\MonkeyPatch.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

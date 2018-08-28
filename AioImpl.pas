@@ -432,7 +432,7 @@ type
 {$IFDEF MSWINDOWS}
 var
   WsaDataOnce: TWSADATA;
-  {$I ../iocpwin.inc}
+  {$I iocpwin.inc}
 {$ENDIF}
 
 

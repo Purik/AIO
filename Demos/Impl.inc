@@ -1,3 +1,3 @@
-AioImpl in '..\..\Impl\AioImpl.pas',
-ChannelImpl in '..\..\Impl\ChannelImpl.pas',
-GreenletsImpl in '..\..\Impl\GreenletsImpl.pas',
+AioImpl in '..\..\AioImpl.pas',
+ChannelImpl in '..\..\ChannelImpl.pas',
+GreenletsImpl in '..\..\GreenletsImpl.pas',

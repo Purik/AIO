@@ -710,11 +710,12 @@ AIO architecturally consists of 4 abstractions:
 
     Channels allow pass data between state machines regardless of thread context. When you put data sample to channel you have not ability to control it anymore. It is not problem if you transferring primitive data (integers, floats) or data of memory managed types (string, dynamic array) or data of autoref types like interfaces. But Delphi is object oriented language and it is sense to send class instances as data. Modern delphi compilers have auto refs counting mechanisms but not for all platforms (windows compiler doesn't support that). To solve this challenge for specific platforms AIO engine has internal reference counting mechanism through TSmartPointer data type. Developer doesn't have to keep in mind this magic. 
 
-    **All you have to remember** - when you send class instance to channel, you don't have to call destructor manually, since this moment AIO automatically destroy object as soon as no one context keep reference to it. 
+>    **All you have to remember** - 
+> when you send class instance to channel, you don't have to call destructor manually, since this moment AIO automatically destroy object as soon as no one context keep reference to it. 
 
 6. **Delayed read/write operations**
     
-    ======= TODO =========
+    It is usefull to implement delayed Read/Write operations for multiple channels 
 
 ## Part 3. AIO Providers
 
@@ -788,15 +789,69 @@ AIO architecturally consists of 4 abstractions:
 
 4. **Named pipes**
 
-        ...
+        var
+		  ServerPipe, ClientPipe: IAioNamedPipe;
+		  Producer, Consumer: TSymmetric<IAioProvider>;
+
+		begin
+		  ServerPipe := Aio.MakeAioNamedPipe('MyPipeName');
+		  ServerPipe.MakeServer;
+		  ClientPipe := Aio.MakeAioNamedPipe('MyPipeName');
+		  ClientPipe.Open;
+		
+		  Producer := TSymmetric<IAioProvider>.Spawn(
+		    procedure(const Prov: IAioProvider)
+		    begin
+		      Prov.WriteLn('Message 1');
+		      Prov.WriteLn('Message 2');
+		      Prov.WriteLn('Done');
+		    end,
+		
+		    ServerPipe
+		  );
+		
+		  Consumer := TSymmetric<IAioProvider>.Spawn(
+		    procedure(const Prov: IAioProvider)
+		    var
+		      S: string;
+		    begin
+		      for S in Prov.ReadLns do begin
+		        Writeln(Format('Consumer received text: "%s"', [S]));
+		        if S = 'Done' then
+		          Exit
+		      end;
+		    end,
+		
+		    ClientPipe
+		  );
+		
+		  Join([Producer, Consumer]);
+		  Write('Press Any key');
+		  ReadLn;
+		
+		end.
 
 5. **Call console applications and communicate with remote process by stdin, stdout, stderr pipes**
 
-        ...
+        var
+		  Console: IAioConsoleApplication;
+		  Line: string;
+
+        begin
+		  Console := MakeAioConsoleApp('tasklist', []);
+		  for Line in Console.StdOut.ReadLns do
+		    WriteLn(Line)
+		  ....
+		end.
 
 6. **Files**
 
-        ...
+        var
+  		  F: IAioFile;
+        begin
+		  F := MakeAioFile('MyFile.txt', fmOpenReadWrite);
+		  ...
+		end.
 
 ## Part 4. Conclusion
 

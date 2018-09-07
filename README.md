@@ -1,3 +1,6 @@
+
+[https://www.facebook.com/aio.delphi](https://www.facebook.com/aio.delphi "Facebook official page")
+
 # Introduction #
 
 AIO implement procedural oriented programming (POP) style in Delphi. It means developer can combine advantages of OOP and POP, splitting logic to multiple state machines, schedule them to threads, connect them by communication channels like in GoLang, write CPU efficient I/O using high level abstractions of OS hardware objects avoiding platform specific non-blocking api calls like Completition ports in Windows world or select/poll/epoll calls in Linux world.

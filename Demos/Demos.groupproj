@@ -45,6 +45,9 @@
         <Projects Include="Tutorial\AsyncChannels.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="HowTo\HowTo.Generators.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -179,14 +182,23 @@
     <Target Name="AsyncChannels:Make">
         <MSBuild Projects="Tutorial\AsyncChannels.dproj" Targets="Make"/>
     </Target>
+    <Target Name="HowTo_Generators">
+        <MSBuild Projects="HowTo\HowTo.Generators.dproj"/>
+    </Target>
+    <Target Name="HowTo_Generators:Clean">
+        <MSBuild Projects="HowTo\HowTo.Generators.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HowTo_Generators:Make">
+        <MSBuild Projects="HowTo\HowTo.Generators.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Symmetric;SpawnVsCreate;Asymmetric;GreenletVarArgs;Generator;JoinN;SelectN;Scheduling;BeginEndThread;MonkeyPatching;PingPong1;PingPong2;SyncChannels;AsyncChannels"/>
+        <CallTarget Targets="Symmetric;SpawnVsCreate;Asymmetric;GreenletVarArgs;Generator;JoinN;SelectN;Scheduling;BeginEndThread;MonkeyPatching;PingPong1;PingPong2;SyncChannels;AsyncChannels;HowTo_Generators"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Symmetric:Clean;SpawnVsCreate:Clean;Asymmetric:Clean;GreenletVarArgs:Clean;Generator:Clean;JoinN:Clean;SelectN:Clean;Scheduling:Clean;BeginEndThread:Clean;MonkeyPatching:Clean;PingPong1:Clean;PingPong2:Clean;SyncChannels:Clean;AsyncChannels:Clean"/>
+        <CallTarget Targets="Symmetric:Clean;SpawnVsCreate:Clean;Asymmetric:Clean;GreenletVarArgs:Clean;Generator:Clean;JoinN:Clean;SelectN:Clean;Scheduling:Clean;BeginEndThread:Clean;MonkeyPatching:Clean;PingPong1:Clean;PingPong2:Clean;SyncChannels:Clean;AsyncChannels:Clean;HowTo_Generators:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Symmetric:Make;SpawnVsCreate:Make;Asymmetric:Make;GreenletVarArgs:Make;Generator:Make;JoinN:Make;SelectN:Make;Scheduling:Make;BeginEndThread:Make;MonkeyPatching:Make;PingPong1:Make;PingPong2:Make;SyncChannels:Make;AsyncChannels:Make"/>
+        <CallTarget Targets="Symmetric:Make;SpawnVsCreate:Make;Asymmetric:Make;GreenletVarArgs:Make;Generator:Make;JoinN:Make;SelectN:Make;Scheduling:Make;BeginEndThread:Make;MonkeyPatching:Make;PingPong1:Make;PingPong2:Make;SyncChannels:Make;AsyncChannels:Make;HowTo_Generators:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

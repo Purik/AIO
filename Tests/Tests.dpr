@@ -37,7 +37,8 @@ uses
   sock in '..\sock.pas',
   AioImpl in '..\AioImpl.pas',
   ChannelImpl in '..\ChannelImpl.pas',
-  GreenletsImpl in '..\GreenletsImpl.pas';
+  GreenletsImpl in '..\GreenletsImpl.pas',
+  AioIndy in '..\AioIndy.pas';
 
 {$R *.RES}
 

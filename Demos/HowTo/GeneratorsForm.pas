@@ -37,46 +37,38 @@ procedure TGeneratorsMainForm.ButtonEx1RunClick(Sender: TObject);
 type
   TInput = TList<Integer>;
 var
-  S, Raw: string;
-  Input: TInput;
-  Even: Integer;
-  Gen: TGenerator<Integer>;
-  Filter: TSymmetricArgsRoutine;
+  N, I: Integer;
+  Gen: TGenerator<UInt64>;
+  Fibonacci: TSymmetricArgsRoutine;
 begin
 
   // Declare filter function
-  Filter := procedure(const Args: array of const)
+  Fibonacci := procedure(const Args: array of const)
   var
-    List: TInput;
-    I: Integer;
+    a, b, c: UInt64;
+    i, n: Integer;
   begin
-    List := TInput(Args[0].AsObject);
-    for I := 0 to List.Count-1 do
-      if (List[I] mod 2) = 0 then
-        TGenerator<Integer>.Yield(List[I]);
+    n := Args[0].AsInteger;
+    a := 0;
+    b := 1;
+    for i := 0 to n do
+    begin
+      c := a;
+      a := b;
+      b := c + b;
+      TGenerator<UInt64>.Yield(c);
+    end;
   end;
 
-  Input := TInput.Create;
-  try
-    Raw := EditEx1Input.Text;
-    for S in Raw.Split([',']) do
-    begin
-      Input.Add(StrToInt(S))
-    end;
-
-
-    EditEx1Output.Text := '';
-
-    // RUN !!!
-    Gen := TGenerator<Integer>.Create(Filter, [Input]);
-    for Even in Gen do
-    begin
-      EditEx1Output.Text := EditEx1Output.Text + IntToStr(Even) + ','
-    end;
-
-  finally
-    Input.Free;
+  N := StrToInt(EditEx1Input.Text);
+  EditEx1Output.Text := '';
+  // RUN !!!
+  Gen := TGenerator<UInt64>.Create(Fibonacci, [N]);
+  for I in Gen do
+  begin
+    EditEx1Output.Text := EditEx1Output.Text + IntToStr(I) + ' '
   end;
+
 end;
 
 end.

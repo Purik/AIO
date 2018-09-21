@@ -1,7 +1,8 @@
 unit AioIndy;
 
 interface
-uses IdIOHandler, IdServerIOHandler, IdIOHandlerSocket, IdGlobal, Aio, SysUtils;
+uses IdIOHandler, IdServerIOHandler, IdComponent, IdIOHandlerSocket, IdGlobal,
+  Aio, SysUtils;
 
 type
 
@@ -20,8 +21,8 @@ type
     function ReadDataFromSource(var VBuffer: TIdBytes): Integer; override;
     function WriteDataToTarget(const ABuffer: TIdBytes; const AOffset, ALength: Integer): Integer; override;
     function SourceIsAvailable: Boolean; override;
-    //function CheckForError(ALastResult: Integer): Integer; virtual; abstract;
-    procedure RaiseError(AError: Integer); virtual; abstract;
+    function CheckForError(ALastResult: Integer): Integer; override;
+    procedure RaiseError(AError: Integer); override;
   public
     destructor Destroy; override;
     function BindingAllocated: Boolean;
@@ -31,6 +32,10 @@ type
     function WriteFile(const AFile: String; AEnableTransferFile: Boolean = False): Int64; override;
     //
     property Binding: IAioProvider read FBinding;
+    //
+    procedure CheckForDisconnect(ARaiseExceptionIfDisconnected: Boolean = True;
+      AIgnoreBuffer: Boolean = False); override;
+    function Readable(AMSec: Integer = IdTimeoutDefault): Boolean; override;
   published
     property BoundIP: string read FBoundIP write FBoundIP;
     property BoundPort: TIdPort read FBoundPort write FBoundPort default IdBoundPortDefault;
@@ -38,14 +43,28 @@ type
     //property TransparentProxy: TIdCustomTransparentProxy read GetTransparentProxy write SetTransparentProxy;
   end;
 
+procedure MakeNonBlocking(const IdComponents: array of TIdComponent);
+
 implementation
-uses IdExceptionCore, IdResourceStringsCore, Classes;
+uses IdExceptionCore, IdResourceStringsCore, Classes, IdStack, IdTCPConnection;
 
 { TAioIdIOHandlerSocket }
 
 function TAioIdIOHandlerSocket.BindingAllocated: Boolean;
 begin
   Result := FBinding <> nil
+end;
+
+procedure TAioIdIOHandlerSocket.CheckForDisconnect(
+  ARaiseExceptionIfDisconnected, AIgnoreBuffer: Boolean);
+begin
+  if ARaiseExceptionIfDisconnected and not FConnected then
+    RaiseConnClosedGracefully
+end;
+
+function TAioIdIOHandlerSocket.CheckForError(ALastResult: Integer): Integer;
+begin
+  // nothing to do
 end;
 
 procedure TAioIdIOHandlerSocket.Close;
@@ -100,6 +119,16 @@ begin
   end;
 end;
 
+procedure TAioIdIOHandlerSocket.RaiseError(AError: Integer);
+begin
+  GStack.RaiseSocketError(AError);
+end;
+
+function TAioIdIOHandlerSocket.Readable(AMSec: Integer): Boolean;
+begin
+  Result := Connected
+end;
+
 function TAioIdIOHandlerSocket.ReadDataFromSource(
   var VBuffer: TIdBytes): Integer;
 begin
@@ -147,6 +176,16 @@ begin
   end
   else
     raise EIdFileNotFound.CreateFmt(RSFileNotFound, [AFile]);
+end;
+
+procedure MakeNonBlocking(const IdComponents: array of TIdComponent);
+var
+  Comp: TIdComponent;
+begin
+  for Comp in IdComponents do begin
+    if Comp.InheritsFrom(TIdTCPConnection) then
+      TIdTCPConnection(Comp).IOHandler := TAioIdIOHandlerSocket.Create(Comp);
+  end
 end;
 
 end.

@@ -50,6 +50,7 @@ type
 
   TAioIdServerIOHandler = class(TIdServerIOHandler)
   protected
+    FSocket: IAioTcpSocket;
     IOHandlerSocketClass: TAioIdIOHandlerSocketClass;
     //
     procedure InitComponent; override;
@@ -257,8 +258,22 @@ end;
 
 function TAioIdServerIOHandler.Accept(ASocket: TIdSocketHandle;
   AListenerThread: TIdThread; AYarn: TIdYarn): TIdIOHandler;
+var
+  Address: string;
+  Port: Integer;
+  Cli: IAioTcpSocket;
 begin
-
+  if FSocket = nil then begin
+    Address := ASocket.IP;
+    Port := ASocket.Port;
+    //ASocket.CloseSocket;
+    FSocket := MakeAioTcpSocket;
+    FSocket.Bind(Address, Port);
+    FSocket.Listen;
+  end;
+  Cli := FSocket.Accept;
+  Result := TAioIdIOHandlerSocket.Create;
+  TAioIdIOHandlerSocket(Result).FBinding := Cli;
 end;
 
 procedure TAioIdServerIOHandler.InitComponent;

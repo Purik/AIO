@@ -2,7 +2,7 @@ unit AioIndy;
 
 interface
 uses IdIOHandler, IdServerIOHandler, IdComponent, IdIOHandlerSocket, IdGlobal,
-  Aio, SysUtils;
+  Aio, SysUtils, IdCustomTransparentProxy, IdYarn, IdSocketHandle, IdThread;
 
 type
 
@@ -15,7 +15,7 @@ type
     FBoundIP: string;
     FBoundPort: TIdPort;
     FDefaultPort: TIdPort;
-    //FTransparentProxy: TIdCustomTransparentProxy;
+    FTransparentProxy: TIdCustomTransparentProxy;
     FUseNagle: Boolean;
     FConnected: Boolean;
     function ReadDataFromSource(var VBuffer: TIdBytes): Integer; override;
@@ -23,6 +23,8 @@ type
     function SourceIsAvailable: Boolean; override;
     function CheckForError(ALastResult: Integer): Integer; override;
     procedure RaiseError(AError: Integer); override;
+    function GetTransparentProxy: TIdCustomTransparentProxy; virtual;
+    procedure SetTransparentProxy(AProxy: TIdCustomTransparentProxy); virtual;
   public
     destructor Destroy; override;
     function BindingAllocated: Boolean;
@@ -40,13 +42,30 @@ type
     property BoundIP: string read FBoundIP write FBoundIP;
     property BoundPort: TIdPort read FBoundPort write FBoundPort default IdBoundPortDefault;
     property DefaultPort: TIdPort read FDefaultPort write FDefaultPort;
-    //property TransparentProxy: TIdCustomTransparentProxy read GetTransparentProxy write SetTransparentProxy;
+    property TransparentProxy: TIdCustomTransparentProxy read GetTransparentProxy write SetTransparentProxy;
   end;
 
-procedure MakeNonBlocking(const IdComponents: array of TIdComponent);
+
+  TAioIdIOHandlerSocketClass = class of TAioIdIOHandlerSocket;
+
+  TAioIdServerIOHandler = class(TIdServerIOHandler)
+  protected
+    IOHandlerSocketClass: TAioIdIOHandlerSocketClass;
+    //
+    procedure InitComponent; override;
+  public
+    function Accept(
+      ASocket: TIdSocketHandle;
+      AListenerThread: TIdThread;
+      AYarn: TIdYarn
+      ): TIdIOHandler;override;
+    function MakeClientIOHandler(ATheThread: TIdYarn): TIdIOHandler; override;
+  end;
+
 
 implementation
-uses IdExceptionCore, IdResourceStringsCore, Classes, IdStack, IdTCPConnection;
+uses IdExceptionCore, IdResourceStringsCore, Classes, IdStack, IdTCPConnection,
+  IdSocks;
 
 { TAioIdIOHandlerSocket }
 
@@ -85,13 +104,22 @@ end;
 
 destructor TAioIdIOHandlerSocket.Destroy;
 begin
-  {if Assigned(FTransparentProxy) then begin
+  if Assigned(FTransparentProxy) then begin
     if FTransparentProxy.Owner = nil then begin
       FreeAndNil(FTransparentProxy);
     end;
-  end;}
+  end;
   FBinding := nil;
   inherited Destroy;
+end;
+
+function TAioIdIOHandlerSocket.GetTransparentProxy: TIdCustomTransparentProxy;
+begin
+  // Necessary at design time for Borland SOAP support
+  if FTransparentProxy = nil then begin
+    FTransparentProxy := TIdSocksInfo.Create(nil); //default
+  end;
+  Result := FTransparentProxy;
 end;
 
 procedure TAioIdIOHandlerSocket.Open;
@@ -137,6 +165,53 @@ begin
     Result := Length(VBuffer);
 end;
 
+procedure TAioIdIOHandlerSocket.SetTransparentProxy(
+  AProxy: TIdCustomTransparentProxy);
+var
+  LClass: TIdCustomTransparentProxyClass;
+begin
+  // All this is to preserve the compatibility with old version
+  // In the case when we have SocksInfo as object created in runtime without owner form it is treated as temporary object
+  // In the case when the ASocks points to an object with owner it is treated as component on form.
+
+  if Assigned(AProxy) then begin
+    if not Assigned(AProxy.Owner) then begin
+      if Assigned(FTransparentProxy) then begin
+        if Assigned(FTransparentProxy.Owner) then begin
+          FTransparentProxy.RemoveFreeNotification(Self);
+          FTransparentProxy := nil;
+        end;
+      end;
+      LClass := TIdCustomTransparentProxyClass(AProxy.ClassType);
+      if Assigned(FTransparentProxy) and (FTransparentProxy.ClassType <> LClass) then begin
+        FreeAndNil(FTransparentProxy);
+      end;
+      if not Assigned(FTransparentProxy) then begin
+        FTransparentProxy := LClass.Create(nil);
+      end;
+      FTransparentProxy.Assign(AProxy);
+    end else begin
+      if Assigned(FTransparentProxy) then begin
+        if not Assigned(FTransparentProxy.Owner) then begin
+          FreeAndNil(FTransparentProxy);
+        end else begin
+          FTransparentProxy.RemoveFreeNotification(Self);
+        end;
+      end;
+      FTransparentProxy := AProxy;
+      FTransparentProxy.FreeNotification(Self);
+    end;
+  end
+  else if Assigned(FTransparentProxy) then begin
+    if not Assigned(FTransparentProxy.Owner) then begin
+      FreeAndNil(FTransparentProxy);
+    end else begin
+      FTransparentProxy.RemoveFreeNotification(Self);
+      FTransparentProxy := nil; //remove link
+    end;
+  end;
+end;
+
 function TAioIdIOHandlerSocket.SourceIsAvailable: Boolean;
 begin
   Result := BindingAllocated and FConnected
@@ -178,14 +253,24 @@ begin
     raise EIdFileNotFound.CreateFmt(RSFileNotFound, [AFile]);
 end;
 
-procedure MakeNonBlocking(const IdComponents: array of TIdComponent);
-var
-  Comp: TIdComponent;
+{ TAioIdServerIOHandler }
+
+function TAioIdServerIOHandler.Accept(ASocket: TIdSocketHandle;
+  AListenerThread: TIdThread; AYarn: TIdYarn): TIdIOHandler;
 begin
-  for Comp in IdComponents do begin
-    if Comp.InheritsFrom(TIdTCPConnection) then
-      TIdTCPConnection(Comp).IOHandler := TAioIdIOHandlerSocket.Create(Comp);
-  end
+
+end;
+
+procedure TAioIdServerIOHandler.InitComponent;
+begin
+  inherited InitComponent;
+  IOHandlerSocketClass := TAioIdIOHandlerSocket;
+end;
+
+function TAioIdServerIOHandler.MakeClientIOHandler(
+  ATheThread: TIdYarn): TIdIOHandler;
+begin
+  Result := IOHandlerSocketClass.Create(nil);
 end;
 
 end.

@@ -2,7 +2,8 @@ unit AioIndy;
 
 interface
 uses IdIOHandler, IdServerIOHandler, IdComponent, IdIOHandlerSocket, IdGlobal,
-  Aio, SysUtils, IdCustomTransparentProxy, IdYarn, IdSocketHandle, IdThread;
+  Aio, SysUtils, IdCustomTransparentProxy, IdYarn, IdSocketHandle, IdThread,
+  IdSSLOpenSSL, IdSSLOpenSSLHeaders, IdCTypes;
 
 type
 
@@ -18,6 +19,8 @@ type
     FTransparentProxy: TIdCustomTransparentProxy;
     FUseNagle: Boolean;
     FConnected: Boolean;
+    FIPVersion: TIdIPVersion;
+    procedure ConnectClient; virtual;
     function ReadDataFromSource(var VBuffer: TIdBytes): Integer; override;
     function WriteDataToTarget(const ABuffer: TIdBytes; const AOffset, ALength: Integer): Integer; override;
     function SourceIsAvailable: Boolean; override;
@@ -25,6 +28,7 @@ type
     procedure RaiseError(AError: Integer); override;
     function GetTransparentProxy: TIdCustomTransparentProxy; virtual;
     procedure SetTransparentProxy(AProxy: TIdCustomTransparentProxy); virtual;
+    procedure InitComponent; override;
   public
     destructor Destroy; override;
     function BindingAllocated: Boolean;
@@ -39,34 +43,34 @@ type
       AIgnoreBuffer: Boolean = False); override;
     function Readable(AMSec: Integer = IdTimeoutDefault): Boolean; override;
   published
+    property IPVersion: TIdIPVersion read FIPVersion write FIPVersion default ID_DEFAULT_IP_VERSION;
     property BoundIP: string read FBoundIP write FBoundIP;
     property BoundPort: TIdPort read FBoundPort write FBoundPort default IdBoundPortDefault;
     property DefaultPort: TIdPort read FDefaultPort write FDefaultPort;
     property TransparentProxy: TIdCustomTransparentProxy read GetTransparentProxy write SetTransparentProxy;
   end;
 
-
-  TAioIdIOHandlerSocketClass = class of TAioIdIOHandlerSocket;
-
-  TAioIdServerIOHandler = class(TIdServerIOHandler)
+  TAioIdIOHandlerStack = class(TAioIdIOHandlerSocket)
   protected
-    FSocket: IAioTcpSocket;
-    IOHandlerSocketClass: TAioIdIOHandlerSocketClass;
-    //
-    procedure InitComponent; override;
+    procedure ConnectClient; override;
+    function ReadDataFromSource(var VBuffer: TIdBytes): Integer; override;
+    function WriteDataToTarget(const ABuffer: TIdBytes; const AOffset, ALength: Integer): Integer; override;
   public
-    function Accept(
-      ASocket: TIdSocketHandle;
-      AListenerThread: TIdThread;
-      AYarn: TIdYarn
-      ): TIdIOHandler;override;
-    function MakeClientIOHandler(ATheThread: TIdYarn): TIdIOHandler; override;
+    procedure CheckForDisconnect(ARaiseExceptionIfDisconnected: Boolean = True;
+      AIgnoreBuffer: Boolean = False); override;
+    function Connected: Boolean; override;
+    function Readable(AMSec: Integer = IdTimeoutDefault): Boolean; override;
   end;
 
 
 implementation
 uses IdExceptionCore, IdResourceStringsCore, Classes, IdStack, IdTCPConnection,
-  IdSocks;
+  IdSocks, IdResourceStringsProtocols, IdStackConsts;
+
+type
+  TAioIdSSLSocket = class(TIdSSLSocket)
+
+  end;
 
 { TAioIdIOHandlerSocket }
 
@@ -98,6 +102,20 @@ begin
   inherited Close;
 end;
 
+procedure TAioIdIOHandlerSocket.ConnectClient;
+begin
+  IPVersion := Self.FIPVersion;
+  if Supports(FBinding, IAioTcpSocket) then
+  begin
+    FConnected := (FBinding as IAioTcpSocket).Connect(Host, Port, CONN_TIMEOUT)
+  end
+  else if Supports(FBinding, IAioUdpSocket) then
+  begin
+    (FBinding as IAioUdpSocket).Bind(Host, Port);
+    FConnected := True;
+  end;
+end;
+
 function TAioIdIOHandlerSocket.Connected: Boolean;
 begin
   Result := (BindingAllocated and FConnected and inherited Connected) or (not InputBufferIsEmpty);
@@ -123,6 +141,12 @@ begin
   Result := FTransparentProxy;
 end;
 
+procedure TAioIdIOHandlerSocket.InitComponent;
+begin
+  inherited InitComponent;
+  FIPVersion := ID_DEFAULT_IP_VERSION;
+end;
+
 procedure TAioIdIOHandlerSocket.Open;
 begin
   inherited Open;
@@ -136,15 +160,7 @@ begin
 
   //if the IOHandler is used to accept connections then port+host will be empty
   if (Host <> '') and (Port > 0) then begin
-    if Supports(FBinding, IAioTcpSocket) then
-    begin
-      FConnected := (FBinding as IAioTcpSocket).Connect(Host, Port, CONN_TIMEOUT)
-    end
-    else if Supports(FBinding, IAioUdpSocket) then
-    begin
-      (FBinding as IAioUdpSocket).Bind(Host, Port);
-      FConnected := True;
-    end;
+    ConnectClient
   end;
 end;
 
@@ -254,38 +270,118 @@ begin
     raise EIdFileNotFound.CreateFmt(RSFileNotFound, [AFile]);
 end;
 
-{ TAioIdServerIOHandler }
+{ TAioIdIOHandlerStack }
 
-function TAioIdServerIOHandler.Accept(ASocket: TIdSocketHandle;
-  AListenerThread: TIdThread; AYarn: TIdYarn): TIdIOHandler;
+procedure TAioIdIOHandlerStack.CheckForDisconnect(ARaiseExceptionIfDisconnected,
+  AIgnoreBuffer: Boolean);
 var
-  Address: string;
-  Port: Integer;
-  Cli: IAioTcpSocket;
+  LDisconnected: Boolean;
 begin
-  if FSocket = nil then begin
-    Address := ASocket.IP;
-    Port := ASocket.Port;
-    //ASocket.CloseSocket;
-    FSocket := MakeAioTcpSocket;
-    FSocket.Bind(Address, Port);
-    FSocket.Listen;
+  // ClosedGracefully // Server disconnected
+  // IOHandler = nil // Client disconnected
+  if ClosedGracefully then begin
+    if BindingAllocated then begin
+      Close;
+      // Call event handlers to inform the user that we were disconnected
+      DoStatus(hsDisconnected);
+      //DoOnDisconnected;
+    end;
+    LDisconnected := True;
+  end else begin
+    LDisconnected := not BindingAllocated;
   end;
-  Cli := FSocket.Accept;
-  Result := TAioIdIOHandlerSocket.Create;
-  TAioIdIOHandlerSocket(Result).FBinding := Cli;
+  // Do not raise unless all data has been read by the user
+  if LDisconnected then begin
+    if (InputBufferIsEmpty or AIgnoreBuffer) and ARaiseExceptionIfDisconnected then begin
+      RaiseConnClosedGracefully;
+    end;
+  end;
 end;
 
-procedure TAioIdServerIOHandler.InitComponent;
+procedure TAioIdIOHandlerStack.ConnectClient;
+var
+  LHost: String;
+  LPort: Integer;
+  LIP: string;
+  LIPVersion : TIdIPVersion;
 begin
-  inherited InitComponent;
-  IOHandlerSocketClass := TAioIdIOHandlerSocket;
+  inherited ConnectClient;
+  if Assigned(FTransparentProxy) then begin
+    if FTransparentProxy.Enabled then begin
+      LHost := FTransparentProxy.Host;
+      LPort := FTransparentProxy.Port;
+      LIPVersion := FTransparentProxy.IPVersion;
+    end else begin
+      LHost := Host;
+      LPort := Port;
+      LIPVersion := IPVersion;
+    end;
+  end else begin
+    LHost := Host;
+    LPort := Port;
+    LIPVersion := IPVersion;
+  end;
+  if LIPVersion = Id_IPv4 then
+  begin
+    if not GStack.IsIP(LHost) then begin
+      if Assigned(OnStatus) then begin
+        DoStatus(hsResolving, [LHost]);
+      end;
+      LIP := GStack.ResolveHost(LHost, LIPVersion);
+    end else begin
+      LIP := LHost;
+    end;
+  end
+  else
+  begin  //IPv6
+    LIP := MakeCanonicalIPv6Address(LHost);
+    if LIP='' then begin  //if MakeCanonicalIPv6Address failed, we have a hostname
+      if Assigned(OnStatus) then begin
+        DoStatus(hsResolving, [LHost]);
+      end;
+      LIP := GStack.ResolveHost(LHost, LIPVersion);
+    end else begin
+      LIP := LHost;
+    end;
+  end;
+
+  // TODO: Binding.SetPeer(LIP, LPort, LIPVersion);
+  // Connect
+  if Assigned(OnStatus) then begin
+    DoStatus(hsConnecting, [LIP]);
+  end;
+
+  if Assigned(FTransparentProxy) then begin
+    if FTransparentProxy.Enabled then begin
+      FTransparentProxy.Connect(Self, Host, Port, IPVersion);
+    end;
+  end;
 end;
 
-function TAioIdServerIOHandler.MakeClientIOHandler(
-  ATheThread: TIdYarn): TIdIOHandler;
+function TAioIdIOHandlerStack.Connected: Boolean;
 begin
-  Result := IOHandlerSocketClass.Create(nil);
+  ReadFromSource(False, 0, False);
+  Result := inherited Connected;
+end;
+
+function TAioIdIOHandlerStack.Readable(AMSec: Integer): Boolean;
+begin
+  Result := inherited Readable(AMSec)
+end;
+
+function TAioIdIOHandlerStack.ReadDataFromSource(
+  var VBuffer: TIdBytes): Integer;
+begin
+  Assert(Binding<>nil);
+  Result := inherited ReadDataFromSource(VBuffer)
+end;
+
+function TAioIdIOHandlerStack.WriteDataToTarget(const ABuffer: TIdBytes;
+  const AOffset, ALength: Integer): Integer;
+begin
+  Assert(Binding<>nil);
+  Result := inherited WriteDataToTarget(ABuffer, AOffset, ALength)
 end;
 
 end.
+

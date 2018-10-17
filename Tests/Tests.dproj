@@ -122,6 +122,7 @@
         <DCCReference Include="..\ChannelImpl.pas"/>
         <DCCReference Include="..\GreenletsImpl.pas"/>
         <DCCReference Include="..\AioIndy.pas"/>
+        <DCCReference Include="AioIndyTests.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

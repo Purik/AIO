@@ -38,7 +38,8 @@ uses
   AioImpl in '..\AioImpl.pas',
   ChannelImpl in '..\ChannelImpl.pas',
   GreenletsImpl in '..\GreenletsImpl.pas',
-  AioIndy in '..\AioIndy.pas';
+  AioIndy in '..\AioIndy.pas',
+  AioIndyTests in 'AioIndyTests.pas';
 
 {$R *.RES}
 

@@ -18,6 +18,7 @@ type
 
   IAioProvider = interface
     ['{2E14A16F-BDF8-4116-88A6-41C18591D444}']
+    function GetFd: THandle;
     // io operations
     // if Size > 0 -> Will return control when all bytes will be transmitted
     // if Size < 0 -> Will return control when the operation is completed partially
@@ -147,7 +148,7 @@ type
   end;
 
 function MakeAioFile(const FileName: string; Mode: Word): IAioFile;
-function MakeAioTcpSocket: IAioTcpSocket;
+function MakeAioTcpSocket: IAioTcpSocket; overload;
 function MakeAioUdpSocket: IAioUdpSocket;
 function MakeAioComPort(const FileName: string): IAioComPort;
 function MakeAioNamedPipe(const Name: string): IAioNamedPipe;

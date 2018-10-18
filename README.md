@@ -291,7 +291,7 @@ AIO architecturally consists of 4 abstractions:
 
     To do this you should use **Join** call with ability set timeout and set flag of reraising exceptions.
 
-    See demo: *Demos\Tutorial\JoinN.dpr*  
+    See demo: [Demos\Tutorial\JoinN.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/JoinN.dpr "Demos\Tutorial\JoinN.dpr") 
 
         {$APPTYPE CONSOLE}
         uses Greenlets;
@@ -336,7 +336,7 @@ AIO architecturally consists of 4 abstractions:
 
     To do this you should use **Select(array of greenlets, Index)** call.
 
-    See demo: *Demos\Tutorial\SelectN.dpr*
+    See demo: [Demos\Tutorial\SelectN.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/SelectN.dpr "Demos\Tutorial\SelectN.dpr")
 
         {$APPTYPE CONSOLE}
         uses Greenlets;
@@ -372,7 +372,7 @@ AIO architecturally consists of 4 abstractions:
 
     Sometimes, developer wish to schedule new greenlet explicitly to known thread. It is sane, for example, if greenlet progress high CPU mathematic. 
 
-    See demo: *Demos\Tutorial\Scheduling.dpr*
+    See demo: [Demos\Tutorial\Scheduling.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/Scheduling.dpr "Demos\Tutorial\Scheduling.dpr")
     
 
         {$APPTYPE CONSOLE}
@@ -423,7 +423,7 @@ AIO architecturally consists of 4 abstractions:
    
      Developer can switch workflow to other thread implicitly.
 
-     See demo: *Demos\Tutorial\BeginEndThread.dpr*
+     See demo: [Demos\Tutorial\BeginEndThread.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/BeginEndThread.dpr "Demos\Tutorial\BeginEndThread.dpr")
 
         function Fibonacci(N: Integer): Integer;
         begin
@@ -536,7 +536,7 @@ AIO architecturally consists of 4 abstractions:
 
      
 
-    See demo: *AIO\Demos\Tutorial\MonkeyPatching.dpr*
+    See demo: [AIO\Demos\Tutorial\MonkeyPatching.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/MonkeyPatching.dpr "Demos\Tutorial\MonkeyPatching.dpr")
         
         uses 
           ... Greenlets, MonkeyPatch ... ;
@@ -611,7 +611,7 @@ AIO architecturally consists of 4 abstractions:
 
     Let's take a view to data sharing across communication channels
 
-    See demo: *Demos\Tutorial\PingPong1.dpr*
+    See demo: [Demos\Tutorial\PingPong1.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/PingPong1.dpr "Demos\Tutorial\PingPong1.dpr")
 
         type
           TPingPongChannel = TChannel<Integer>;
@@ -663,7 +663,7 @@ AIO architecturally consists of 4 abstractions:
 
     Channels implement IEnumerable interface, so we can rewrite ponger to same manner:
 
-    See demo: *Demos\Tutorial\PingPong2.dpr*
+    See demo: [Demos\Tutorial\PingPong2.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/PingPong2.dpr "Demos\Tutorial\PingPong2.dpr")
 
         Ponger := TSymmetric<TPingPongChannel>.Spawn(
             procedure(const Chan: TPingPongChannel)
@@ -693,7 +693,7 @@ AIO architecturally consists of 4 abstractions:
 
         MyChannel := TChannel<Integer>.Make;  
 
-    See demo: *Demos\Tutorial\SyncChannels.dpr*
+    See demo: [Demos\Tutorial\SyncChannels.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/SyncChannels.dpr "Demos\Tutorial\SyncChannels.dpr")
 
 4. **Async channels**
 
@@ -707,7 +707,7 @@ AIO architecturally consists of 4 abstractions:
 
         MyChannel := TChannel<Integer>.Make(N);  // where N is buffer size > 0  
 
-    See demo: *Demos\Tutorial\AsyncChannels.dpr*
+    See demo: [Demos\Tutorial\AsyncChannels.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/AsyncChannels.dpr "Demos\Tutorial\AsyncChannels.dpr")
 
 5. **Class instances as data samples and references counting problem**
 
@@ -877,6 +877,10 @@ AIO architecturally consists of 4 abstractions:
 
 
 # HowTo guides
+
+* **Generators**  [Demos\HowTo\GeneratorsForm.pas](https://github.com/Purik/AIO/blob/master/Demos/HowTo/GeneratorsForm.pas)
+
+* **Http Client** [Demos\HowTo\HowTo.HttpClient.dpr](https://github.com/Purik/AIO/blob/master/Demos/HowTo/HowTo.HttpClient.dpr)
 
 * **Greenlets**
    

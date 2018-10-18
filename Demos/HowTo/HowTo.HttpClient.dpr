@@ -7,6 +7,7 @@ program HowTo.HttpClient;
 uses
   System.SysUtils,
   Classes,
+  Aio,
   AioIndy,
   Greenlets,
   IdIOHandlerStack,
@@ -14,7 +15,8 @@ uses
   IdHTTP;
 
 const
-  PARALLEL_NUM = 1000;
+  PARALLEL_NUM = 50;
+  STRESS_FACTOR = 100;
 
 var
   Stamp: TDateTime;
@@ -32,6 +34,7 @@ begin
 end;
 
 begin
+  Writeln('Workers Count = ' + IntToStr(PARALLEL_NUM));
   Writeln('Using blocking Indy sockets');
   Stamp := Now;
   // Threads with blocking sockets
@@ -42,13 +45,16 @@ begin
         var
           Client: TIdHTTP;
           Response: string;
+          I: Integer;
         begin
           Client := TIdHTTP.Create(nil);
           try
             Client.IOHandler := TIdIOHandlerStack.Create(Client);
             Client.HandleRedirects := True;
-            Response := Client.Get('http://uit.fun/aio');
-            Assert(Response <> '');
+            for I := 1 to STRESS_FACTOR do begin
+              Response := Client.Get('http://uit.fun/aio');
+              Assert(Response <> '');
+            end;
           finally
             Client.Free;
           end;
@@ -67,20 +73,25 @@ begin
   finally
     Threads.Free
   end;
+
   Writeln('Using non-blocking Aio IO handler');
   Stamp := Now;
   for I := 0 to PARALLEL_NUM-1 do begin
-    G := TSymmetric.Spawn(procedure
+    G := TSymmetric.Create(procedure
       var
         Client: TIdHTTP;
         Response: string;
+        I: Integer;
       begin
         Client := TIdHTTP.Create(nil);
         try
+          //Write('*');
           Client.IOHandler := TAioIdIOHandlerSocket.Create(Client);
           Client.HandleRedirects := True;
-          Response := Client.Get('http://uit.fun/aio');
-          Assert(Response <> '');
+          for I := 1 to STRESS_FACTOR do begin
+            Response := Client.Get('http://uit.fun/aio');
+            Assert(Response <> '');
+          end;
         finally
           Client.Free;
         end;
@@ -88,7 +99,13 @@ begin
     );
     Greenlets[I] := G;
   end;
-  Greenlets.Join;
+  try
+    Greenlets.Join(INFINITE, True);
+  except
+    on E: Exception do begin
+      Writeln('Error: ' + E.Message);
+    end
+  end;
   PrintTimeout(Stamp, Now);
   Readln;
 end.

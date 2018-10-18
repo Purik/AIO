@@ -82,6 +82,7 @@ type
     //
     procedure TcpStressClient(const Count: Integer;
       const Port: Integer; const Index: Integer);
+    procedure TcpConnect(const Address: string; const Port: Integer; const Index: Integer);
   protected
     procedure SetUp; override;
     procedure TearDown; override;
@@ -108,6 +109,7 @@ type
     procedure AioTCPSocketConnect;
     procedure AioTCPReaderWriter;
     procedure AioTcpStress;
+    procedure AioTcpConnStress;
     // aio потокобезопасны
     procedure ReadWriteMultithreaded;
     // udp
@@ -376,6 +378,20 @@ begin
   end;
 end;
 
+procedure TAioTests.AioTcpConnStress;
+const
+  CLI_COUNT = 50;
+  STRESS_FACTOR = 100;
+var
+  Clients: TGreenGroup<Integer>;
+  I: Integer;
+begin
+  for I := 1 to CLI_COUNT do begin
+    Clients[I] := TSymmetric<string, Integer, Integer>.Spawn(TcpConnect, 'aio.fun', 80, I);
+  end;
+  Check(Clients.Join(INFINITE, True), 'Clients.Join');
+end;
+
 procedure TAioTests.AioTCPReaderWriter;
 var
   Server, R, W: IRawGreenlet;
@@ -465,7 +481,7 @@ begin
   for I := 1 to CLI_COUNT do begin
     Clients[I] := TSymmetric<Integer, Integer, Integer>.Spawn(TcpStressClient, STRESS_FACTOR, 1986, I);
   end;
-  Check(Clients.Join, 'Clients.Join');
+  Check(Clients.Join(INFINITE, True), 'Clients.Join');
 end;
 
 procedure TAioTests.AioUdpRoundBobin;
@@ -1154,6 +1170,14 @@ begin
     end;
   Writed := SC.Write(@Buffer[0], Readed);
   CheckEquals(Readed, Writed);
+end;
+
+procedure TAioTests.TcpConnect(const Address: string; const Port: Integer; const Index: Integer);
+var
+  Sock: IAioTcpSocket;
+begin
+  Sock := MakeAioTcpSocket;
+  Check(Sock.Connect(Address, Port, 1000), 'conn timeout Index = ' + IntToStr(Index));
 end;
 
 procedure TAioTests.TcpReader(const A: array of const);

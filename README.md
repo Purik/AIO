@@ -46,7 +46,7 @@ AIO architecturally consists of 4 abstractions:
         
     TSymmetric<T1, T2,...Tn> - greenlet with explicit typed input arguments. 
 
-    See demo: *Demos\Tutorial\Symmetric.dpr*
+    See demo: [Demos\Tutorial\Symmetric.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/Symmetric.dpr "Demos\Tutorial\Symmetric.dpr")
     
         {$APPTYPE CONSOLE}
           ....
@@ -143,7 +143,7 @@ AIO architecturally consists of 4 abstractions:
         
       example: Arithmetic progression. 
 
-      see demo: *Demos\Tutorial\Asymmetric.dpr*
+      see demo: [Demos\Tutorial\Asymmetric.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/Asymmetric.dpr "Demos\Tutorial\Asymmetric.dpr")
         
         {$APPTYPE CONSOLE}
         .....
@@ -196,7 +196,7 @@ AIO architecturally consists of 4 abstractions:
 
     Sometimes developer need to operate TVarArg parameners. To do so there is TGreenlet.
 
-    See demo: *Demos\Tutorial\GreenletVarArgs.dpr*
+    See demo: [Demos\Tutorial\GreenletVarArgs.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/GreenletVarArgs.dpr "Demos\Tutorial\GreenletVarArgs.dpr")
 
         var
           G: TGreenlet;
@@ -237,7 +237,7 @@ AIO architecturally consists of 4 abstractions:
     
     Generator is very useful syntaсtic sugar in many languages, it is time when you can use it in Delphi now. No more words only example...   
 
-    See demo: *Demos\Tutorial\Generator.dpr*
+    See demo: [Demos\Tutorial\Generator.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/Generator.dpr "Demos\Tutorial\Generator.dpr")
 
         {$APPTYPE CONSOLE}
         uses Greenlets;

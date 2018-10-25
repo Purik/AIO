@@ -88,7 +88,7 @@ end;
 
 function TAioIdIOHandlerSocket.CheckForError(ALastResult: Integer): Integer;
 begin
-  // nothing to do
+  Result := GStack.CheckForSocketError(ALastResult, [Id_WSAESHUTDOWN, Id_WSAECONNABORTED, Id_WSAECONNRESET]);
 end;
 
 procedure TAioIdIOHandlerSocket.Close;

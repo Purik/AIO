@@ -177,8 +177,6 @@ type
     procedure JoinAll2;
     procedure JoinAllReraiseErrors;
     procedure JoinReraiseErrors;
-    // Slice
-    procedure Slice;
     // актуализация RefCount аргумента-интерфейса
     procedure ArgsRefCount;
     procedure FinalizeArgs;
@@ -542,44 +540,6 @@ begin
     Greenlets.GreenSleep(A[I].AsInteger);
 end;
 
-procedure TGreenletTests.Slice;
-var
-  Tup: tTuple;
-
-  function IsEqual(const Tup1: tTuple; const Tup2: array of const): Boolean;
-  var
-    I: Integer;
-  begin
-    Result := Length(Tup1) = Length(Tup2);
-    if Result then begin
-      for I := 0 to High(Tup1) do begin
-        if Tup1[I].VType <> Tup2[I].VType then
-          Exit(False);
-        if Tup1[I].VInt64 <> Tup2[I].VInt64 then
-          Exit(False);
-      end;
-    end;
-  end;
-
-begin
-  Tup := Greenlets.Slice([1,2,3,4,5], 2);
-  Check(IsEqual(Tup, [3,4,5]));
-
-  Tup := Greenlets.Slice([1,2,3,4,5], 0);
-  Check(IsEqual(Tup, [1,2,3,4,5]));
-
-  Tup := Greenlets.Slice([1,2,3,4,5], 0);
-  Check(IsEqual(Tup, [1,2,3,4,5]));
-
-  Tup := Greenlets.Slice([1,2,3,4,5], 40);
-  Check(IsEqual(Tup, []));
-
-  Tup := Greenlets.Slice([1,2,3,4,5], 2, 3);
-  Check(IsEqual(Tup, [3,4]));
-
-  Tup := Greenlets.Slice([1,2,3,4,5], 3, 30);
-  Check(IsEqual(Tup, [4,5]));
-end;
 
 procedure TGreenletTests.Spawn;
 begin

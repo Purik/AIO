@@ -626,8 +626,6 @@ type
     class operator In(a: ICase; b: TCaseSet) : Boolean;
   end;
 
-function Slice(const Args: array of const; FromIndex: Integer;
-  ToIndex: Integer = -1): tTuple;
 // current context
 function GetCurrent: TObject;
 function GetEnvironment: IGreenEnvironment;

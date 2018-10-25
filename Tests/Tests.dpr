@@ -39,7 +39,10 @@ uses
   ChannelImpl in '..\ChannelImpl.pas',
   GreenletsImpl in '..\GreenletsImpl.pas',
   AioIndy in '..\AioIndy.pas',
-  AioIndyTests in 'AioIndyTests.pas';
+  AioIndyTests in 'AioIndyTests.pas',
+  CPUID in '..\detour\CPUID.pas',
+  DDetours in '..\detour\DDetours.pas',
+  InstDecode in '..\detour\InstDecode.pas';
 
 {$R *.RES}
 

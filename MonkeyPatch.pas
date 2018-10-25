@@ -22,6 +22,7 @@
 unit MonkeyPatch;
 
 interface
+uses DDetours;
 
 procedure PatchWinMsg(Patch: Boolean);
 procedure PatchEvent(Patch: Boolean);

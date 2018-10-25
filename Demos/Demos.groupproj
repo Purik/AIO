@@ -51,6 +51,9 @@
         <Projects Include="HowTo\HowTo.HttpClient.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="C:\Users\Purik\Downloads\delphi-detours-library-master\Demo\DetoursDemo\Delphi\Objects\Demo1\Demo1.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -203,14 +206,23 @@
     <Target Name="HowTo_HttpClient:Make">
         <MSBuild Projects="HowTo\HowTo.HttpClient.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Demo1">
+        <MSBuild Projects="C:\Users\Purik\Downloads\delphi-detours-library-master\Demo\DetoursDemo\Delphi\Objects\Demo1\Demo1.dproj"/>
+    </Target>
+    <Target Name="Demo1:Clean">
+        <MSBuild Projects="C:\Users\Purik\Downloads\delphi-detours-library-master\Demo\DetoursDemo\Delphi\Objects\Demo1\Demo1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Demo1:Make">
+        <MSBuild Projects="C:\Users\Purik\Downloads\delphi-detours-library-master\Demo\DetoursDemo\Delphi\Objects\Demo1\Demo1.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Symmetric;SpawnVsCreate;Asymmetric;GreenletVarArgs;Generator;JoinN;SelectN;Scheduling;BeginEndThread;MonkeyPatching;PingPong1;PingPong2;SyncChannels;AsyncChannels;HowTo_Generators;HowTo_HttpClient"/>
+        <CallTarget Targets="Symmetric;SpawnVsCreate;Asymmetric;GreenletVarArgs;Generator;JoinN;SelectN;Scheduling;BeginEndThread;MonkeyPatching;PingPong1;PingPong2;SyncChannels;AsyncChannels;HowTo_Generators;HowTo_HttpClient;Demo1"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Symmetric:Clean;SpawnVsCreate:Clean;Asymmetric:Clean;GreenletVarArgs:Clean;Generator:Clean;JoinN:Clean;SelectN:Clean;Scheduling:Clean;BeginEndThread:Clean;MonkeyPatching:Clean;PingPong1:Clean;PingPong2:Clean;SyncChannels:Clean;AsyncChannels:Clean;HowTo_Generators:Clean;HowTo_HttpClient:Clean"/>
+        <CallTarget Targets="Symmetric:Clean;SpawnVsCreate:Clean;Asymmetric:Clean;GreenletVarArgs:Clean;Generator:Clean;JoinN:Clean;SelectN:Clean;Scheduling:Clean;BeginEndThread:Clean;MonkeyPatching:Clean;PingPong1:Clean;PingPong2:Clean;SyncChannels:Clean;AsyncChannels:Clean;HowTo_Generators:Clean;HowTo_HttpClient:Clean;Demo1:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Symmetric:Make;SpawnVsCreate:Make;Asymmetric:Make;GreenletVarArgs:Make;Generator:Make;JoinN:Make;SelectN:Make;Scheduling:Make;BeginEndThread:Make;MonkeyPatching:Make;PingPong1:Make;PingPong2:Make;SyncChannels:Make;AsyncChannels:Make;HowTo_Generators:Make;HowTo_HttpClient:Make"/>
+        <CallTarget Targets="Symmetric:Make;SpawnVsCreate:Make;Asymmetric:Make;GreenletVarArgs:Make;Generator:Make;JoinN:Make;SelectN:Make;Scheduling:Make;BeginEndThread:Make;MonkeyPatching:Make;PingPong1:Make;PingPong2:Make;SyncChannels:Make;AsyncChannels:Make;HowTo_Generators:Make;HowTo_HttpClient:Make;Demo1:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

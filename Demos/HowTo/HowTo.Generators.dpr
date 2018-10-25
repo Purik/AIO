@@ -1,6 +1,8 @@
 program HowTo.Generators;
 
 uses
+   {$I ../Impl.inc}
+  {$I ../Includes.inc}
   Vcl.Forms,
   GeneratorsForm in 'GeneratorsForm.pas' {GeneratorsMainForm};
 

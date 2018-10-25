@@ -6,8 +6,8 @@
         <MainSource>AsyncChannels.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <TargetedPlatforms>1</TargetedPlatforms>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -71,6 +71,9 @@
         <DCC_UsePackage>TeeGL917;FMXTee917;TeeTree2D17Tee9;AdvComp;TeeMaker117;bindcompfmx;vcldbx;RaizeComponentsVclDb;fmx;rtl;dbrtl;DbxClientDriver;IndySystem;RaizeComponentsVcl;bindcomp;inetdb;vclib;inetdbbde;DBXInterBaseDriver;DataSnapCommon;TeePro917;TeeImport917;xmlrtl;svnui;ibxpress;DbxCommonDriver;vclimg;IndyProtocols;dbxcds;DBXMySQLDriver;MetropolisUILiveTile;vclactnband;bindengine;vcldb;soaprtl;bindcompdbx;vcldsnap;bindcompvcl;TeeUI917;FmxTeeUI917;vclie;vcltouch;FMXTeeImport917;websnap;CustomIPTransport;vclribbon;VclSmp;dsnap;IndyIPServer;TeeDB917;Intraweb;fmxase;vcl;IndyCore;TeeLanguage917;IndyIPCommon;CloudService;CodeSiteExpressPkg;dsnapcon;inet;fmxobj;AdvTeeChart;TeeWorld917;vclx;inetdbxpress;webdsnap;svn;SimpleGraphComponent;FMXTeePro917;fmxdae;TeeImage917;bdertl;FMXTeeLanguage917;Tee917;dbexpress;adortl;FMXTeeDB917;IndyIPClient;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <DCC_UsePackage>bindcompfmx;RaizeComponentsVclDb;fmx;rtl;dbrtl;DbxClientDriver;IndySystem;RaizeComponentsVcl;bindcomp;inetdb;vclib;DBXInterBaseDriver;DataSnapCommon;xmlrtl;ibxpress;DbxCommonDriver;vclimg;IndyProtocols;dbxcds;DBXMySQLDriver;vclactnband;bindengine;vcldb;soaprtl;bindcompdbx;vcldsnap;bindcompvcl;vclie;vcltouch;websnap;CustomIPTransport;VclSmp;dsnap;IndyIPServer;fmxase;vcl;IndyCore;IndyIPCommon;dsnapcon;inet;fmxobj;vclx;inetdbxpress;webdsnap;fmxdae;dbexpress;adortl;IndyIPClient;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
@@ -157,7 +160,7 @@
             <Platforms>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
-                <Platform value="Win64">False</Platform>
+                <Platform value="Win64">True</Platform>
             </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>

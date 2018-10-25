@@ -5,11 +5,10 @@ program HowTo.HttpClient;
 {$R *.res}
 
 uses
+  {$I ../Impl.inc}
+  {$I ../Includes.inc}
   System.SysUtils,
   Classes,
-  Aio,
-  AioIndy,
-  Greenlets,
   IdIOHandlerStack,
   Generics.Collections,
   IdHTTP;

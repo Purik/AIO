@@ -1,3 +1,25 @@
+// **************************************************************************************************
+// Delphi Aio Library.
+// Unit AioIndy
+// https://github.com/Purik/AIO
+
+// The contents of this file are subject to the Apache License 2.0 (the "License");
+// you may not use this file except in compliance with the License. You may obtain a copy of the
+// License at http://www.apache.org/licenses/LICENSE-2.0
+//
+//
+// The Original Code is AioIndy.pas.
+//
+// Contributor(s):
+// Pavel Minenkov
+// Purik
+// https://github.com/Purik
+//
+// The Initial Developer of the Original Code is Pavel Minenkov [Purik].
+// All Rights Reserved.
+//
+// **************************************************************************************************
+
 unit AioIndy;
 
 interface

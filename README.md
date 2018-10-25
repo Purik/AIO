@@ -703,7 +703,7 @@ AIO architecturally consists of 4 abstractions:
 
     In other words, async channel is analogue of transaction memory approach. Keep it in mind.
 
-    How to create Sync channel:
+    How to create Async channel:
 
         MyChannel := TChannel<Integer>.Make(N);  // where N is buffer size > 0  
 

@@ -1,4 +1,4 @@
-
+[<iframe src="https://money.yandex.ru/quickpay/shop-widget?writer=seller&targets=Aio%20Framework%20donation&targets-hint=&default-sum=&button-text=11&payment-type-choice=on&mobile-payment-type-choice=on&hint=&successURL=&quickpay=shop&account=41001322898977" width="423" height="222" frameborder="0" allowtransparency="true" scrolling="no"></iframe>]("Donate")
 [https://www.facebook.com/aio.delphi](https://www.facebook.com/aio.delphi "Facebook official page")
 
 # Introduction #

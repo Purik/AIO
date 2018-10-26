@@ -1,3 +1,4 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Z5ND8JMKY8E6A)
 
 [https://www.facebook.com/aio.delphi](https://www.facebook.com/aio.delphi "Facebook official page")
 
@@ -676,12 +677,6 @@ AIO architecturally consists of 4 abstractions:
             end
           );
 
-    Lets's take view to example below: making pizza.
-
-    We have pizza order flow. Suppose customer make choice of sauces. Every sauce is implemented by specific greenlet.
-
-        ...
-    
 
 3. **Sync channels**
 
@@ -882,13 +877,18 @@ AIO architecturally consists of 4 abstractions:
 
 * **Http Client** [Demos\HowTo\HowTo.HttpClient.dpr](https://github.com/Purik/AIO/blob/master/Demos/HowTo/HowTo.HttpClient.dpr)
 
-* **Greenlets**
-   
-    TODO
 
 * **Local contexts**
 
     TODO
+
+* **Making pizza example**
+Lets's take view to example below: making pizza.
+
+    We have pizza order flow. Suppose customer make choice of sauces. Every sauce is implemented by specific greenlet.
+
+        ...
+    
 
 * **Symmetrics**
     
@@ -951,6 +951,8 @@ AIO architecturally consists of 4 abstractions:
     TODO
 
 * **Queues**
+  
+    TODO
 
 * **FanOut**
 

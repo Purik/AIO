@@ -99,7 +99,7 @@ AIO architecturally consists of 4 abstractions:
 
     Difference between **Spawn** and **Create** constructor calls: when you create symmetric with **Spawn**, symmetric is calling immediately, when you create symmetric by **Create**, it has status "Ready" - it is not started until "Switch" call.
 
-    See demo: *Demos\Tutorial\SpawnVsCreate.dpr*
+    See demo: [Demos\Tutorial\SpawnVsCreate.dpr](https://github.com/Purik/AIO/blob/master/Demos/Tutorial/SpawnVsCreate.dpr "Demos\Tutorial\SpawnVsCreate.dpr")
         
         ...        
         var 

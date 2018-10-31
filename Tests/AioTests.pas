@@ -1215,7 +1215,9 @@ var
 begin
   Sock := MakeAioTcpSocket;
   Check(Sock.Connect('localhost', Port, 1000), 'conn timeout for ' + IntToStr(Index));
+  {$IFDEF DEBUG}
   DebugString(Format('Connected socket[%d]', [Index]));
+  {$ENDIF}
   for I := 1 to Count do begin
     Expected := Format('message[%d][%d]', [Index, I]);
     Sock.WriteLn(Expected);

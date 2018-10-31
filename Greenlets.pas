@@ -777,28 +777,6 @@ begin
   end;
 end;
 
-function Slice(const Args: array of const; FromIndex: Integer;
-  ToIndex: Integer = -1): tTuple;
-var
-  vToIndex, vFromIndex, I, vLen, Ind: Integer;
-begin
-  SetLength(Result, 0);
-  if ToIndex = -1 then
-    vToIndex := High(Args)
-  else
-    vToIndex := Min(High(Args), ToIndex);
-  vFromIndex := FromIndex;
-  vLen := vToIndex - vFromIndex + 1;
-  if vLen > 0 then begin
-    SetLength(Result, vLen);
-    Ind := 0;
-    for I := vFromIndex to vToIndex do begin
-      Result[Ind] := Args[I];
-      Inc(Ind);
-    end;
-  end
-end;
-
 function PendingError2SwitchStatus(const Input: TPendingError; const IO: TIOOperation): TSwitchResult;
 begin
   Result := srError;

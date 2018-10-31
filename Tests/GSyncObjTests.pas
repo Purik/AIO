@@ -331,9 +331,14 @@ var
   Gen: TGenerator<Integer>;
   List: TList<Integer>;
   Iter: Integer;
+  Tail: tTuple;
+  I: Integer;
 begin
   List := TList<Integer>(Args[0].AsObject);
-  Gen := TGenerator<Integer>.Create(GeneratorBody2, Slice(Args, 1));
+  SetLength(Tail, Length(Args)-1);
+  for I := 0 to High(Tail) do
+    Tail[I] := Args[I+1];
+  Gen := TGenerator<Integer>.Create(GeneratorBody2, Tail);
   for Iter in Gen do
     List.Add(Iter);
 end;

@@ -28,7 +28,10 @@ package Aio;
 {$IMPLICITBUILD ON}
 
 requires
-  rtl;
+  rtl,
+  IndySystem,
+  IndyProtocols,
+  IndyCore;
 
 contains
   Aio in '..\Aio.pas',

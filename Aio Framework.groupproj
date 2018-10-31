@@ -9,6 +9,9 @@
         <Projects Include="Demos\Tutorial\Symmetric.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Packages\Aio.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="Symmetric:Make">
         <MSBuild Projects="Demos\Tutorial\Symmetric.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Aio">
+        <MSBuild Projects="Packages\Aio.dproj"/>
+    </Target>
+    <Target Name="Aio:Clean">
+        <MSBuild Projects="Packages\Aio.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Aio:Make">
+        <MSBuild Projects="Packages\Aio.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Tests;Symmetric"/>
+        <CallTarget Targets="Tests;Symmetric;Aio"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Tests:Clean;Symmetric:Clean"/>
+        <CallTarget Targets="Tests:Clean;Symmetric:Clean;Aio:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Tests:Make;Symmetric:Make"/>
+        <CallTarget Targets="Tests:Make;Symmetric:Make;Aio:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

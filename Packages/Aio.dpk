@@ -1,0 +1,52 @@
+package Aio;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl;
+
+contains
+  Aio in '..\Aio.pas',
+  AioImpl in '..\AioImpl.pas',
+  AioIndy in '..\AioIndy.pas',
+  Boost in '..\Boost.pas',
+  ChannelImpl in '..\ChannelImpl.pas',
+  GarbageCollector in '..\GarbageCollector.pas',
+  Gevent in '..\Gevent.pas',
+  GInterfaces in '..\GInterfaces.pas',
+  Greenlets in '..\Greenlets.pas',
+  GreenletsImpl in '..\GreenletsImpl.pas',
+  Hub in '..\Hub.pas',
+  MonkeyPatch in '..\MonkeyPatch.pas',
+  PasMP in '..\PasMP.pas',
+  sock in '..\sock.pas',
+  CPUID in '..\detour\CPUID.pas',
+  DDetours in '..\detour\DDetours.pas',
+  InstDecode in '..\detour\InstDecode.pas';
+
+end.

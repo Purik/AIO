@@ -24,7 +24,7 @@ unit AioImpl;
 
 interface
 uses Classes, Greenlets, Gevent, Hub, SysUtils, sock, RegularExpressions, Aio,
-  SyncObjs, GInterfaces,
+  SyncObjs, GInterfaces, IdGlobal,
   {$IFDEF MSWINDOWS}
   Winapi.Windows
   {$ELSE}
@@ -145,7 +145,8 @@ type
     procedure WriteLn(const S: array of string); overload;
     function WriteString(Enc: TEncoding; const Buf: string; const EOL: string = CRLF): Boolean;
     //  others
-    function ReadBytes(out Buf: TBytes): Boolean;
+    function ReadBytes(out Buf: TBytes): Boolean; overload;
+    function ReadBytes(out Buf: TIdBytes): Boolean; overload;
     function ReadByte(out Buf: Byte): Boolean;
     function ReadInteger(out Buf: Integer): Boolean;
     function ReadSmallInt(out Buf: SmallInt): Boolean;
@@ -587,6 +588,17 @@ end;
 function TAioProvider.ReadByte(out Buf: Byte): Boolean;
 begin
   Result := Read(@Buf, SizeOf(Byte)) = SizeOf(Byte);
+end;
+
+function TAioProvider.ReadBytes(out Buf: TIdBytes): Boolean;
+var
+  TmpBuf: TBytes;
+begin
+  Result := ReadBytes(TmpBuf);
+  if Result then begin
+    SetLength(Buf, Length(TmpBuf));
+    Move(Pointer(TmpBuf)^, Pointer(Buf)^, Length(Buf));
+  end;
 end;
 
 function TAioProvider.ReadBytes(out Buf: TBytes): Boolean;

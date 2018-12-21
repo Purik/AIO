@@ -685,7 +685,7 @@ var
   FName: string;
   Rand: Int64;
   Enthropy: Double;
-  I, Iter: Integer;
+  I, Iter, Sz: Integer;
   vReadData, TestData: AnsiString;
   FS: TFileStream;
 begin
@@ -707,13 +707,15 @@ begin
   end;
 
   FS := TFileStream.Create(FName, fmOpenRead);
-  with FS do try
+  try
     SetLength(vReadData, Length(TestData));
-    ReadData(Pointer(vReadData), Length(vReadData));
+    FS.Seek(0, soFromBeginning);
+    Sz := FS.Read(Pointer(vReadData)^, Length(vReadData));
+    Check(Sz = Length(TestData));
     Check(vReadData = TestData, 'write test data broked after read');
     Check(FDataSz = Length(TestData), 'Returned datasize problems');
   finally
-    Free;
+    FS.Free;
     DeleteFile(PChar(FName));
   end;
 end;

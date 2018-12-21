@@ -24,7 +24,7 @@ unit Aio;
 
 interface
 uses Classes, Greenlets, Gevent, Hub, SysUtils, sock, RegularExpressions,
-  SyncObjs,
+  SyncObjs, IdGlobal,
   {$IFDEF MSWINDOWS}
   Winapi.Windows
   {$ELSE}
@@ -69,7 +69,8 @@ type
     procedure WriteLn(const S: array of string); overload;
     function WriteString(Enc: TEncoding; const Buf: string; const EOL: string = CRLF): Boolean;
     //  others
-    function ReadBytes(out Buf: TBytes): Boolean;
+    function ReadBytes(out Buf: TBytes): Boolean; overload;
+    function ReadBytes(out Buf: TIdBytes): Boolean; overload;
     function ReadByte(out Buf: Byte): Boolean;
     function ReadInteger(out Buf: Integer): Boolean;
     function ReadSmallInt(out Buf: SmallInt): Boolean;

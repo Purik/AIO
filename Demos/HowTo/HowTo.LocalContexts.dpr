@@ -7,10 +7,16 @@ program HowTo.LocalContexts;
 uses
   {$I ../Impl.inc}
   {$I ../Includes.inc}
+  Classes,
   System.SysUtils;
 
+function GetAddress: string;
 begin
-  Greenlets.Context()
+  Result := GetEnvironment.GetStrValue('Connection.Address')
+end;
+
+begin
+
   try
     { TODO -oUser -cConsole Main : Insert code here }
   except

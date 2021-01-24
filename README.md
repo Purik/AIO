@@ -2,7 +2,7 @@
 
 [https://www.facebook.com/aio.delphi](https://www.facebook.com/aio.delphi "Facebook official page")
 
-Thanks for ptomotion to [learndelphi.org](academic version of embarcadero learndelphi.org)
+Thanks for ptomotion to [https://learndelphi.org/](academic version of embarcadero learndelphi.org)
 
 # Introduction #
 

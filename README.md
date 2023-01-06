@@ -2,6 +2,9 @@
 
 [https://www.facebook.com/aio.delphi](https://www.facebook.com/aio.delphi "Facebook official page")
 
+## Contact Me
+ `minikspb@gmail.com`
+
 ## Thanks for ptomotion to [learndelphi.org - academic version of embarcadero](https://learndelphi.org)
 
 # Introduction #
